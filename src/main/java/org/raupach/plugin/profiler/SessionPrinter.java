@@ -25,7 +25,9 @@ public class SessionPrinter {
         "MappedStatement",
         "Times",
         "Min. Response",
-        "Max. Response"
+        "Max. Response",
+        "Sum",
+        "Avg. Response"
     };
 
     public static void print(Session session) {
@@ -35,18 +37,37 @@ public class SessionPrinter {
         if (events.size() > 0) {
             List<AggregatedEvent> aggregatedEvents = EventAggregator.compute(events);
 
-            Object[][] data = new Object[aggregatedEvents.size()][];
+            Object[][] data = new Object[aggregatedEvents.size() + 1][];
+
+            long overallSum = 0;
+            long overallTimes = 0;
 
             for (int i = 0; i < aggregatedEvents.size(); i++) {
                 AggregatedEvent event = aggregatedEvents.get(i);
+
+                overallSum += event.getSum();
+                overallTimes += event.getTimes();
+
                 Object[] row = new Object[]{
                     event.getMappedStatement(),
                     event.getTimes(),
                     event.getMin(),
-                    event.getMax()
+                    event.getMax(),
+                    event.getSum(),
+                    event.getSum() / event.getTimes()
                 };
                 data[i] = row;
             }
+
+            Object[] summary = new Object[] {
+                  "",
+                  overallTimes,
+                  "",
+                  "",
+                  overallSum,
+                  overallSum / overallTimes
+            };
+            data[aggregatedEvents.size()] = summary;
 
             Table table = new Table(header, data);
 

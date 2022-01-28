@@ -23,12 +23,14 @@ public class AggregatedEvent implements Serializable  {
     private final int times;
     private final long min;
     private final long max;
+    private final long sum;
 
-    public AggregatedEvent(String mappedStatement, int times, long min, long max) {
+    public AggregatedEvent(String mappedStatement, int times, long min, long max, long sum) {
         this.mappedStatement = mappedStatement;
         this.times = times;
         this.min = min;
         this.max = max;
+        this.sum = sum;
     }
 
     public String getMappedStatement() {
@@ -47,6 +49,10 @@ public class AggregatedEvent implements Serializable  {
         return max;
     }
 
+    public long getSum() {
+        return sum;
+    }
+
     @Override
     public String toString() {
         return new StringBuilder()
@@ -57,6 +63,8 @@ public class AggregatedEvent implements Serializable  {
                 .append(min)
                 .append(" ")
                 .append(max)
+                .append(" ")
+                .append(sum)
                 .toString();
     }
     

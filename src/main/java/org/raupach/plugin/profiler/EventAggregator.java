@@ -48,6 +48,7 @@ public class EventAggregator {
             int times = 1;
             long min = event.getResponseTime();
             long max = event.getResponseTime();
+            long sum = event.getResponseTime();
             
             int j;
             
@@ -58,6 +59,7 @@ public class EventAggregator {
                     times++;
                     min = min(min, event.getResponseTime());
                     max = max(max, event.getResponseTime());
+                    sum += event.getResponseTime();
                 } else {
                     break;
                 }
@@ -66,7 +68,7 @@ public class EventAggregator {
             i = j - 1;
             
             AggregatedEvent aggregatedEvent = 
-                    new AggregatedEvent(mappedStatement, times, min, max);
+                    new AggregatedEvent(mappedStatement, times, min, max, sum);
             aggregatedEvents.add(aggregatedEvent);
         }   
         
